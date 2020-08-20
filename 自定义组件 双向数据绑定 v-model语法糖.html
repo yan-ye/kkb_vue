@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+<div id="demo">
+
+    <add-courtse v-model='courtse' @add-court='addCourtse'></add-courtse>
+    
+    <p v-if='courtses.length > 0'> {{courtses}} </p>
+    <p v-else> 没有任何信息呀 </p>
+
+</div>
+
+<script src="./js/vue.js"></script>
+<script>
+
+ // 自定义组件间
+ Vue.component('add-courtse', {
+        props: {
+            value: {
+                type: String,
+                default:'' 
+            },
+        },
+        template: `
+        <div>
+            <input type="text" :value='value' @input='onInput' @keydown.enter='addCourt'>
+            <button @click='addCourt'>增加</button>
+        </div>
+        `,
+        methods: {
+            onInput(e) {
+                this.$emit('input',e.target.value)
+            },
+            addCourt() {
+                this.$emit('add-court')
+            }
+        },
+
+
+    })
+
+
+
+    const app = new Vue({
+        el:'#demo',
+        data() {
+            return {
+                courtse: '',
+                courtses:[],
+            }
+        },
+        methods: {
+            addCourtse() {
+                if(this.courtse) {
+                    this.courtses.push(this.courtse)
+                    this.courtse = ''
+                }else {
+                    alert('添加的课程不能为空')
+                }
+               
+            }
+        },
+    })
+   
+
+
+</script>
+</body>
+</html>

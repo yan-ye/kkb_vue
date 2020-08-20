@@ -13,25 +13,26 @@
 <body>
     
     <div id="app">
-        <!-- 差值 -->
+        <!-- 差值 -->       
        <h2>
            {{title}}
        </h2>
        <!-- 数据交互 -->
-       <input v-model="courte" @keydown.enter='addCourte' type="text" /><button @click='addCourte'>添加课程</button>
+      <add-courtes v-model='courte' @add-courte9="addCourte"></add-courtes>
+      <!-- <add-courtes :value='courte' @input='courte=$event'  @add-courte9="addCourte"></add-courtes> -->
        <!-- calss -->
        <!-- <div v-for="item in courtes" :key="item" :class='{active: selecedCourte === item}' @click='selecedCourte = item'>
            <div> {{ item }} </div>
        </div> -->
        <!-- style -->
-       <div class="course-list" v-if='courtes.length > 0'>
+       <!-- <div class="course-list" v-if='courtes.length > 0'>
          <div v-for="item in courtes" :key="item" :style="{'background-color': selecedCourte === item ? '#ddd' : ''}" @click='selecedCourte = item'>
             <div> {{ item }} </div>
           </div> 
-       </div>
+       </div> -->
        <!-- 条件渲染 -->
-       <p v-else>没有任何课程信息</p>
-
+    
+       <courtes-list :courtes='courtes'> </courtes-list>     
        <!-- 商品总数 -->
        <!-- 计算属性 -->
        <!-- <p>
@@ -45,15 +46,75 @@
 </body>
 
 <script>
+    //模拟异步请求数据
+    function getCourtes() {
+        return new Promise( resolve => {
+            setInterval(() => {
+                resolve(['web全栈', 'web高级'])
+            }, 1000);
+        })
+    }
+
+    // 课程列表组件
+    Vue.component('courtes-list', {
+        data() {
+            return {
+                selecedCourte: ''
+            }
+        },
+        props: {
+            courtes:{
+                type: Array,
+                default: [],
+            }
+        },
+        template: `
+            <div>
+                <div class="course-list" v-if='courtes.length > 0'>
+                <div v-for="(item, i) in courtes" :key="i" :style="{'background-color': selecedCourte === item ? '#ddd' : ''}" @click='selecedCourte = item'>
+                <div> {{ item }} </div>
+                </div> 
+                </div>
+                <p v-else>没有任何课程信息</p>
+            </div>
+        `
+    })
+
+    Vue.component('add-courtes', {
+        // data() {
+        //     return {
+        //         courte: '',
+        //     }
+        // },
+        props: ['value'],
+        
+        template: `
+            <div>
+                <input @input='oninput' @keydown.enter='addCourte' type="text" :value='value' /><button @click='addCourte'>添加课程</button>    
+            </div>
+        `,
+        methods: {
+            addCourte () {
+                //派发一个事件  来通知父组件新增课程
+                this.$emit('add-courte9');
+                
+                 
+            },
+            oninput (e) { 
+                this.$emit('input', e.target.value)
+            }
+
+        },
+      
+    })
     const app = new Vue({
         el: '#app',
         data() {
             return {
                 title: '课程购物车',
-                courte: '',
-                selecedCourte: '',
                 total_count: 0,
-                courtes:['web全栈', 'web高级']
+                courte: '',
+                courtes:[]
             }
         },
         methods: {
@@ -61,7 +122,7 @@
                 this.title = 'muah~ 是 vue 呀'
             },
             addCourte () {
-                if(this.courte.length > 0) {
+                if(this.courte) {
                     this.courtes.push(this.courte)
                     this.courte = '';
                 }else {
@@ -69,6 +130,15 @@
                 }
             },
     
+        },
+        async created () {
+            //组件实例已创建 未挂载 dom 不存在
+            const c =  await getCourtes();
+            this.courtes = c;
+        },
+        mounted () {
+            //已挂载 dom已存在   
+
         },
         computed: {
             // 计算属性具有缓存的属性 如果不变化不会重新计算 
