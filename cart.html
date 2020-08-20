@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cart</title>
+    <style>
+        .active {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="app">
+        <!-- 差值 -->
+        
+       <h2>
+           {{title}}
+       </h2>
+       <!-- 数据交互 -->
+       <input v-model="courte" @keydown.enter='addCourte' type="text" /><button @click='addCourte'>添加课程</button>
+       <!-- calss -->
+       <!-- <div v-for="item in courtes" :key="item" :class='{active: selecedCourte === item}' @click='selecedCourte = item'>
+           <div> {{ item }} </div>
+       </div> -->
+       <!-- style -->
+       <div class="course-list" v-if='courtes.length > 0'>
+         <div v-for="item in courtes" :key="item" :style="{'background-color': selecedCourte === item ? '#ddd' : ''}" @click='selecedCourte = item'>
+            <div> {{ item }} </div>
+          </div> 
+       </div>
+       <!-- 条件渲染 -->
+       <p v-else>没有任何课程信息</p>
+
+       <!-- 商品总数 -->
+       <!-- 计算属性 -->
+       <!-- <p>
+           课程总数：{{total}}
+       </p> -->
+       <!-- watch实现 -->
+       课程总数：{{total_count}}
+       
+    </div>
+    <script src="./js/vue.js"></script>
+</body>
+
+<script>
+    const app = new Vue({
+        el: '#app',
+        data() {
+            return {
+                title: '课程购物车',
+                courte: '',
+                selecedCourte: '',
+                total_count: 0,
+                courtes:['web全栈', 'web高级']
+            }
+        },
+        methods: {
+            onclick() {
+                this.title = 'muah~ 是 vue 呀'
+            },
+            addCourte () {
+                if(this.courte.length > 0) {
+                    this.courtes.push(this.courte)
+                    this.courte = '';
+                }else {
+                    alert('添加的课程不能为空')
+                }
+            },
+    
+        },
+        computed: {
+            // 计算属性具有缓存的属性 如果不变化不会重新计算 
+            total() {
+                return this.courtes.length + '门'
+            }
+        },
+        // 默认情况下 只有发生变化才会监听  初始化时不监听
+        // watch: {
+        //     courtes(newValue, oldValue) {
+        //         this.total_count = newValue.length + '门'
+        //     }
+        // },
+        // 初始化时就会监听的watch
+        watch: {
+            courtes: {
+                immediate: true, //立即执行一次
+                deep: true,
+                handler(newValue, oldValue) {
+                    this.total_count = newValue.length + '门'
+                }
+            }
+        },
+    });
+    
+
+
+
+</script>
+
+</html>

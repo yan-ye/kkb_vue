@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <div>
+            Ask a yes/no question: <input type="text" v-model='question'>
+            <p> {{ msg }} </p>
+        
+        </div>
+
+    </div> 
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+    <script src="./js/vue.js"></script>   
+    <script>
+        const app = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    question: '',
+                    msg: '在您提出问题之前，我无法给您答复！'
+                }
+            },
+            watch: {
+                question(newVlaue, oldValue) {
+                    this.msg = '等待您停止输入...';
+                this.debouncedGetAnswer()
+                
+                } 
+            
+            },
+            methods: {
+                getInfo() {
+                    if(this.question.indexOf('?') === -1) {
+                        return this.msg = '问题通常包含一个问号。 ;-)'
+                    }
+                    this.msg ='等待您停止输入...'
+                    var vm = this
+                    axios.get('https://yesno.wtf/api').then((response)=>{
+                        console.log(2222222);
+                        vm.msg = _.capitalize(response.data.answer)
+                    }).catch( (error)=> {
+                        console.log(1111)
+                        vm.msg = '问题通常包含一个问号。 ;-)'
+                    })
+
+                }
+            },
+            created () {
+                this.debouncedGetAnswer = _.debounce(this.getInfo, 500)
+            },
+          
+            
+
+
+        });
+
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cart</title>
+    <style>
+        .active {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="app"></div>
+    <script src="./js/vue.js"></script>
+</body>
+
+<script>
+    const app = new Vue({
+        el: '#app',
+        data() {
+            return {
+                title: '课程购物车',
+                courte: '',
+                selecedCourte: '',
+                courtes:['web全栈', 'web高级']
+            }
+        },
+        methods: {
+            onclick() {
+                this.title = 'muah~ 是 vue 呀'
+            },
+            addCourte () {
+                if(this.courte.length > 0) {
+                    this.courtes.push(this.courte)
+                    this.courte = '';
+                }else {
+                    alert('添加的课程不能为空')
+                }
+            },
+    
+        },
+        // 虚拟DOM
+       render() {
+        with(this){return _c('div',{attrs:{"id":"app"}},[_c('h2',[_v("\n           "+_s(title)+"\n       ")]),_v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(courte),expression:"courte"}],attrs:{"type":"text"},domProps:{"value":(courte)},on:{"keydown":function($event){if(!$event.type.indexOf('key')&&_k($event.keyCode,"enter",13,$event.key,"Enter"))return null;return addCourte($event)},"input":function($event){if($event.target.composing)return;courte=$event.target.value}}}),_c('button',{on:{"click":addCourte}},[_v("添加课程")]),_v(" "),(courtes.length > 0)?_c('div',{staticClass:"course-list"},_l((courtes),function(item){return _c('div',{key:item,style:({'background-color': selecedCourte === item ? '#ddd' : ''}),on:{"click":function($event){selecedCourte = item}}},[_c('div',[_v(" "+_s(item)+" ")])])}),0):_c('p',[_v("没有任何课程信息")])])}
+       }
+    });
+    
+
+console.log(app.$options.render);
+
+</script>
+
+</html>
