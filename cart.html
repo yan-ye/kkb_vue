@@ -8,11 +8,29 @@
         .active {
             background-color: #ddd;
         }
+        .message-box {
+            padding: 10px 20px;
+            background-color: rgb(41, 207, 64);
+        }
+        .message-btn-close {
+            float: right;
+            margin-right: 20px;
+        }
     </style>
 </head>
 <body>
     
     <div id="app">
+        <message :show.sync='show'>
+            <!-- 具名卡槽 -->
+            <template v-slot:title>
+                <strong>恭喜🎉</strong>
+            </template>
+            <!-- 作用域插槽 -->
+            <template v-slot:name1='slotName'> <em>{{slotName.name1}}</em> </template>
+            <!-- 默认卡槽 -->
+            <template v-slot:default> 添加课程成功！</template>
+        </message>
         <!-- 差值 -->       
        <h2>
            {{title}}
@@ -79,7 +97,8 @@
             </div>
         `
     })
-
+    
+    //添加课程组建
     Vue.component('add-courtes', {
         // data() {
         //     return {
@@ -107,6 +126,33 @@
         },
       
     })
+   
+    //插槽实现内容分发
+    Vue.component('message', {
+        props:['show'],
+        data() {
+            return {
+                name: '来自message内的恭喜'
+            }
+        },
+        template: `
+            <div v-if='show' class='message-box'>
+                <!-- 具名卡槽 -->
+                <slot name='title'>🎉🎉 恭喜 🎉🎉</slot>
+                <!-- 作用域插槽 -->
+                <slot name='name1' :name1='name'></slot>
+                <!-- 默认卡槽 -->
+                <slot></slot>  
+                <button class='message-btn-close' @click='close'>X</button>
+            </div>
+        `,
+        methods: {
+            close() {
+                this.$emit('update:show', false)
+            }
+        },
+    })
+   
     const app = new Vue({
         el: '#app',
         data() {
@@ -114,6 +160,7 @@
                 title: '课程购物车',
                 total_count: 0,
                 courte: '',
+                show: false,
                 courtes:[]
             }
         },
@@ -125,6 +172,7 @@
                 if(this.courte) {
                     this.courtes.push(this.courte)
                     this.courte = '';
+                    this.show = true;
                 }else {
                     alert('添加的课程不能为空')
                 }
