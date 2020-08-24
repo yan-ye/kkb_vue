@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="root">
+       <!-- <add-courte :value='court' @input='court=$event' @add-courte='addCourte'></add-courte> -->
+       <message ref='msg' :show.sync='show'>
+           <template v-slot:title>
+               <strong>恭喜</strong>
+           </template>
+           添加课程成功
+       </message>
+       <message ref='msg1' :show.sync='showWarning'>
+        <template v-slot:title>
+            <strong>警告</strong>
+        </template>
+        请填写课程名称
+   
+   
+   
+   
+     </message>
+     <button @click='colseMsg'>关闭msg</button>
+     <button @click='$bus.$emit("msg-close")'>批量关闭msg</button>
+       <add-courte v-model='court' @add-courte='addCourte'></add-courte>
+      {{courtes}}
+    </div>
+</body>
+<script src="./js/vue.js"></script>
+<script>
+
+    Vue.prototype.$bus = new Vue();
+    Vue.component('message', {
+        props:['show'],
+        template:`
+        <div class="message-box" v-if='show'>
+           <slot name='title'></slot>
+           <slot></slot>
+
+        <button>X</button>
+        </div>
+        `,
+        methods: {
+            close() {
+                this.$emit('update:show', false)
+            }
+        },
+        mounted () {
+            this.$bus.$on('msg-close', () =>{
+                this.$emit('update:show', false)
+            });
+        },
+    
+    })
+
+    Vue.component('add-courte', {
+        props:['value'],
+        template:`<div>
+        <input type="text" @keydown.enter='addCourte' :value='value' @input='onInput'> 
+        <button @click='addCourte'>新增课程</button>
+       </div>`,
+       methods: {
+            addCourte() {
+               this.$emit('add-courte')
+            },
+            onInput(e) {
+                this.$emit('input', e.target.value)
+            }
+       },
+    })
+   
+
+    const app = new Vue({
+        el: '#root',
+        data() {
+            return {
+                courtes: [],
+                court: '',
+                show:false,
+                showWarning:false
+            }
+        },
+        methods: {
+            addCourte() {
+                if(this.court) {
+                    this.courtes.push(this.court)
+                    this.court= '';
+                    this.show = true
+                }else {
+                    this.showWarning = true
+                }
+            
+            },
+            colseMsg() {
+                this.$refs.msg.close()
+                this.$refs.msg1.close()
+            }
+        },
+
+
+    });
+
+
+
+</script>
+</html>
