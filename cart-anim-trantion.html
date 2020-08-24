@@ -21,6 +21,26 @@
             float: right;
             margin-right: 20px;
         }
+
+        /* 
+        动画样式定义
+
+        入场前    .fade-enter 
+        表演中    .fade-enter-active
+        表演结束   .fade-enter-to
+
+        离场前    .fade-leave
+        离场中    .falde-leave-active
+        离场结束  .falde-leave-to
+
+         */
+         .fade-enter, .fade-leave-to {
+             opacity: 0;
+         }
+
+         .fade-enter-active, .fade-leave-active {
+            transition: opacity 1s  
+         }
     </style>
 </head>
 <body>
@@ -73,9 +93,7 @@
            {{title}}
        </h2>
       <!-- 批量清除通知栏 -->
-      <div class="toolbar">
-        <button @click='$bus.$emit("msg-close ")' v-permission="'admin'">批量清除通知栏</button>
-      </div>
+       <button @click='$bus.$emit("msg-close ")'>批量清除通知栏</button>
        <!-- 批量修改课程价格 -->
        <edit-price :value.number='price' @input='price=$event' @edit-price='editPrice'></edit-price>
        <!-- 添加课程数据交互 -->
@@ -120,19 +138,6 @@ Vue.prototype.$bus = new Vue();
         })
     }
 
-    // 模拟用户
-    const user = 'admin'
-    
-    //自定义指令
-    Vue.directive('permission', {
-        inserted: (el, binding) =>{
-            console.log(el, '>>>>>>>', binding);
-            if(binding.value !== user) {
-                el.parentElement.removeChild(el)
-            }
-        }
-    })
-    
     // 课程列表组件
     Vue.component('courtes-list', {
         data() {
@@ -234,6 +239,7 @@ Vue.prototype.$bus = new Vue();
             }
         },
         template: `
+           <transition name='fade'>
             <div v-if='show' class='message-box'>
                 <!-- 具名卡槽 -->
                 <slot name='title'>🎉🎉 恭喜 🎉🎉</slot>
@@ -241,6 +247,8 @@ Vue.prototype.$bus = new Vue();
                 <slot></slot>  
                 <button class='message-btn-close' @click='toggle'>X</button>
             </div>
+           
+           </transition>
         `,
         methods: {
             toggle() {
