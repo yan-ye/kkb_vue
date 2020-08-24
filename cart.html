@@ -74,8 +74,9 @@
        </h2>
       <!-- 批量清除通知栏 -->
       <div class="toolbar">
-        <button @click='$bus.$emit("msg-close ")' v-permission="'admin'">批量清除通知栏</button>
+        <button @click='$bus.$emit("msg-close ")' v-permission="'admin'" >批量清除通知栏</button>
       </div>
+      <test></test>
        <!-- 批量修改课程价格 -->
        <edit-price :value.number='price' @input='price=$event' @edit-price='editPrice'></edit-price>
        <!-- 添加课程数据交互 -->
@@ -132,7 +133,6 @@ Vue.prototype.$bus = new Vue();
             }
         }
     })
-    
     // 课程列表组件
     Vue.component('courtes-list', {
         data() {
@@ -174,7 +174,7 @@ Vue.prototype.$bus = new Vue();
         
         template: `
             <div>
-                <input @input='oninput' @keydown.enter='addCourte' type="text" ref='inp' :value='value' /><button @click='addCourte'>添加课程</button>    
+                <input @input='oninput' @keydown.enter='addCourte' type="text" ref='inp' :value='value' /><button @click='addCourte'>添加课程</button>   
             </div>
         `,
         methods: {
@@ -195,6 +195,20 @@ Vue.prototype.$bus = new Vue();
       
     })
    
+    //测试组件
+    Vue.component('test', { 
+        template: `
+            <div><input type="text" v-valu> <button>测试</button></div>
+        `,
+        directives: {
+            valu: {
+                inserted: el => {
+                    el.value = '默认值'
+                }
+            }
+        }
+    })
+
     //插槽实现内容分发 弹窗组件间  
     Vue.component('message', {
         props:['show'],
