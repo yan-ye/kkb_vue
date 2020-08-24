@@ -10,7 +10,12 @@
         }
         .message-box {
             padding: 10px 20px;
+        }
+        .success {
             background-color: rgb(41, 207, 64);
+        }
+        .warning {
+            background-color: rgb(255, 3, 90);
         }
         .message-btn-close {
             float: right;
@@ -21,22 +26,58 @@
 <body>
     
     <div id="app">
-        <message :show.sync='show'>
+        <!-- <message :show.sync='show' class="success"> -->
             <!-- 具名卡槽 -->
-            <template v-slot:title>
-                <strong>恭喜🎉</strong>
+            <!-- <template v-slot:title> -->
+                <!-- <strong>恭喜🎉</strong> -->
+            <!-- </template> -->
+            <!-- 作用域插槽 -->
+            <!-- <template v-slot:name1='slotName'> <em>{{slotName.name1}}</em> </template> -->
+            <!-- 默认卡槽 -->
+            <!-- <template v-slot:default> 添加课程成功！</template> -->
+        <!-- </message> -->
+        <!-- <message :show='showWan' @update:show='showWan=$event' class="warning"> -->
+            <!-- 具名卡槽 -->
+            <!-- <template v-slot:title>
+                <strong>警告</strong>
+            </template> -->
+            <!-- 作用域插槽 -->
+            <!-- <template v-slot:name1='slotName'> <em>{{slotName.name1}}</em> </template> -->
+            <!-- 默认卡槽 -->
+            <!-- <template v-slot:default> 请填写课程名称！</template>
+        </message> -->
+
+        <msg-ref class="success" ref='msgSuccess'>
+              <!-- 具名卡槽 -->
+              <template v-slot:title>
+                <strong>恭喜</strong>
             </template>
             <!-- 作用域插槽 -->
-            <template v-slot:name1='slotName'> <em>{{slotName.name1}}</em> </template>
             <!-- 默认卡槽 -->
-            <template v-slot:default> 添加课程成功！</template>
-        </message>
+            <template v-slot:default> 添加课程成功</template>
+        </msg-ref>
+
+
+        <msg-ref class="warning" ref='msgWarning'>
+            <!-- 具名卡槽 -->
+            <template v-slot:title>
+              <strong>警告</strong>
+          </template>
+          <!-- 作用域插槽 -->
+          <!-- 默认卡槽 -->
+          <template v-slot:default> 请填写课程名称</template>
+      </msg-ref>
+
         <!-- 差值 -->       
        <h2>
            {{title}}
        </h2>
-       <!-- 数据交互 -->
-      <add-courtes v-model='courte' @add-courte9="addCourte"></add-courtes>
+      <!-- 批量清除通知栏 -->
+       <button @click='$bus.$emit("msg-close ")'>批量清除通知栏</button>
+       <!-- 批量修改课程价格 -->
+       <edit-price :value.number='price' @input='price=$event' @edit-price='editPrice'></edit-price>
+       <!-- 添加课程数据交互 -->
+      <add-courtes v-model='courte' @add-courte9="addCourte" ></add-courtes>
       <!-- <add-courtes :value='courte' @input='courte=$event'  @add-courte9="addCourte"></add-courtes> -->
        <!-- calss -->
        <!-- <div v-for="item in courtes" :key="item" :class='{active: selecedCourte === item}' @click='selecedCourte = item'>
@@ -50,7 +91,7 @@
        </div> -->
        <!-- 条件渲染 -->
     
-       <courtes-list :courtes='courtes'> </courtes-list>     
+       <courtes-list :courtes='courtes' @remove-c='removeC($event)'> </courtes-list>     
        <!-- 商品总数 -->
        <!-- 计算属性 -->
        <!-- <p>
@@ -58,17 +99,21 @@
        </p> -->
        <!-- watch实现 -->
        课程总数：{{total_count}}
+
+      <br>总价格: {{total_price}}
        
     </div>
     <script src="./js/vue.js"></script>
 </body>
 
 <script>
+
+Vue.prototype.$bus = new Vue();
     //模拟异步请求数据
     function getCourtes() {
         return new Promise( resolve => {
             setInterval(() => {
-                resolve(['web全栈', 'web高级'])
+                resolve([{name:'web全栈'}, {name:'web高级'}])
             }, 1000);
         })
     }
@@ -89,13 +134,18 @@
         template: `
             <div>
                 <div class="course-list" v-if='courtes.length > 0'>
-                <div v-for="(item, i) in courtes" :key="i" :style="{'background-color': selecedCourte === item ? '#ddd' : ''}" @click='selecedCourte = item'>
-                <div> {{ item }} </div>
+                <div v-for="(item, i) in courtes" :key="i" :style="{'background-color': selecedCourte === item.name ? '#ddd' : ''}" @click='selecedCourte = item.name'>
+                <div> {{ item.name }} -- ￥{{item.price}} --- <button @click='removeC(this,item, i)'>X</button> </div>
                 </div> 
                 </div>
                 <p v-else>没有任何课程信息</p>
             </div>
-        `
+        `,
+        methods: {
+            removeC(e, item, i) {
+                this.$emit('remove-c', {obj: item, index: i})
+            }
+        },
     })
     
     //添加课程组建
@@ -109,7 +159,7 @@
         
         template: `
             <div>
-                <input @input='oninput' @keydown.enter='addCourte' type="text" :value='value' /><button @click='addCourte'>添加课程</button>    
+                <input @input='oninput' @keydown.enter='addCourte' type="text" ref='inp' :value='value' /><button @click='addCourte'>添加课程</button>    
             </div>
         `,
         methods: {
@@ -124,10 +174,13 @@
             }
 
         },
+        mounted () {
+            this.$refs.inp.focus()  
+        }
       
     })
    
-    //插槽实现内容分发
+    //插槽实现内容分发 弹窗组件间  
     Vue.component('message', {
         props:['show'],
         data() {
@@ -151,7 +204,55 @@
                 this.$emit('update:show', false)
             }
         },
+        mounted () {
+            this.$bus.$on('msg-close', () =>{
+                this.$emit('update:show', false)
+            })
+        },
     })
+   
+    //弹窗组件 ------ ref 
+    Vue.component('msg-ref', {
+        data() {
+            return {
+                show: false
+            }
+        },
+        template: `
+            <div v-if='show' class='message-box'>
+                <!-- 具名卡槽 -->
+                <slot name='title'>🎉🎉 恭喜 🎉🎉</slot>
+                <!-- 默认卡槽 -->
+                <slot></slot>  
+                <button class='message-btn-close' @click='toggle'>X</button>
+            </div>
+        `,
+        methods: {
+            toggle() {
+                this.show = !this.show
+            }
+        },
+    });
+
+    //批量修改课程价格组件
+    Vue.component('edit-price', {
+        props:['value'],
+        template:`
+            <div>
+                <input type="text" :value='value' @input='onInput'> <button>批量修改</button>    
+            </div>
+        `,
+        methods: {
+            onInput(e) {
+                this.$emit('input', e.target.value)
+                this.$emit('edit-price')
+            },
+            
+        },
+    })
+   
+   
+
    
     const app = new Vue({
         el: '#app',
@@ -161,6 +262,9 @@
                 total_count: 0,
                 courte: '',
                 show: false,
+                price: 0,
+                showWan:false,
+                total_price: 0,
                 courtes:[]
             }
         },
@@ -170,19 +274,30 @@
             },
             addCourte () {
                 if(this.courte) {
-                    this.courtes.push(this.courte)
+                    this.courtes.push({name: this.courte})
                     this.courte = '';
                     this.show = true;
+                    this.$refs.msgSuccess.toggle()
                 }else {
-                    alert('添加的课程不能为空')
+                    this.showWan = true;
+                    this.$refs.msgWarning.toggle()
                 }
             },
+            editPrice() {
+                this.courtes.forEach(obj => {
+                    this.$set(obj, 'price', this.price)
+                });
+            },
+            removeC(event) {
+                this.courtes.splice(event.index, 1)
+            }
     
         },
         async created () {
             //组件实例已创建 未挂载 dom 不存在
             const c =  await getCourtes();
             this.courtes = c;
+            this.editPrice()
         },
         mounted () {
             //已挂载 dom已存在   
@@ -192,7 +307,8 @@
             // 计算属性具有缓存的属性 如果不变化不会重新计算 
             total() {
                 return this.courtes.length + '门'
-            }
+            },
+            
         },
         // 默认情况下 只有发生变化才会监听  初始化时不监听
         // watch: {
@@ -207,6 +323,13 @@
                 deep: true,
                 handler(newValue, oldValue) {
                     this.total_count = newValue.length + '门'
+                    let num= 0;
+                    newValue.forEach( obj => {
+                        
+                        num+= Number(obj.price ? obj.price : 0);
+                    })
+                    this.total_price = num
+
                 }
             }
         },
