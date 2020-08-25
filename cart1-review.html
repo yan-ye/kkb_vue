@@ -1,47 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+
+    </style>
 </head>
+
 <body>
     <div id="root">
-       <!-- <add-courte :value='court' @input='court=$event' @add-courte='addCourte'></add-courte> -->
-       <message ref='msg' :show.sync='show'>
-           <template v-slot:title>
-               <strong>恭喜</strong>
-           </template>
-           添加课程成功
-       </message>
-       <message ref='msg1' :show.sync='showWarning'>
-        <template v-slot:title>
-            <strong>警告</strong>
-        </template>
-        请填写课程名称
-   
-   
-   
-   
-     </message>
-     <button @click='colseMsg'>关闭msg</button>
-     <button @click='$bus.$emit("msg-close")'>批量关闭msg</button>
-       <add-courte v-model='court' @add-courte='addCourte'></add-courte>
-      {{courtes}}
+        <!-- <add-courte :value='court' @input='court=$event' @add-courte='addCourte'></add-courte> -->
+        <message ref='msg' :show.sync='show'>
+            <template v-slot:title>
+                <strong>恭喜</strong>
+            </template>
+            添加课程成功
+        </message>
+        <message ref='msg1' :show.sync='showWarning'>
+            <template v-slot:title>
+                <strong>警告</strong>
+            </template>
+            请填写课程名称
+        </message>
+
+        <!-- h_title: String,
+        leve: String,
+        title: String,
+        icon: String,
+        icon_alt: String, -->
+        <test-div leve=2 title="nice plugin" h_title='我是title' icon='./svg/cart.svg' icon_alt='购物车'>hello plugin</test-div>
+
+
+        <div class="toolbar" v-permission>
+            <button @click='colseMsgError'>关闭失败msg</button>
+            <button @click='colseMsgSuccess'>关闭成功msg</button>
+            <button @click='$bus.$emit("msg-close")'>批量关闭msg</button>
+        </div>
+
+        <heading title="hello render" leve='3' icon='./svg/cart.svg' icon_alt='购物车'>Hello render</heading>
+        <add-courte v-model='court' @add-courte='addCourte'></add-courte>
+        {{courtes}}
     </div>
 </body>
 <script src="./js/vue.js"></script>
+<script src="./plugins/test-div.js"></script>
 <script>
-
+    
+    //混入
+    const myMixin = {
+        created() {
+            this.hello()
+        },
+        methods: {
+            hello() {
+                console.log('hello mixin');
+            }
+        },
+    }
+    //模拟用户
+    const user = 'admin';
     Vue.prototype.$bus = new Vue();
+    //自动获取焦点 -- 指令
+    Vue.directive('focus', {
+        inserted(e) {
+            e.focus()
+        }
+    })
+    //权限控制  --  指令
+    Vue.directive('permission', {
+        inserted(el) {
+            if (user !== 'admin') {
+                el.parentElement.removeChild(el)
+            }
+        }
+    })
+    //通知栏  --  组件
     Vue.component('message', {
-        props:['show'],
-        template:`
+        props: ['show'],
+        template: `
         <div class="message-box" v-if='show'>
            <slot name='title'></slot>
            <slot></slot>
 
-        <button>X</button>
+        <button @click='close'>X</button>
         </div>
         `,
         methods: {
@@ -49,30 +93,71 @@
                 this.$emit('update:show', false)
             }
         },
-        mounted () {
-            this.$bus.$on('msg-close', () =>{
+        mounted() {
+            this.$bus.$on('msg-close', () => {
                 this.$emit('update:show', false)
             });
         },
-    
+
     })
+    // heading render -- 组件
+    Vue.component('heading', {
+        //  <img src="./svg/cart.svg" alt="购物车">
+        //使用混入
+        mixins: [myMixin],
+        props: {
+            leve: {
+                type: String,
+                default: '1'
+            },
+            title: String,
+            icon: String,
+            icon_alt: String
+
+        },
+        render(h) {
+            let children = [];
+            if (this.icon) {
+                children.push(
+                    h(
+                        'img',
+                        { attrs: { src: this.icon, alt: this.icon_alt } },
+                    )
+                )
+            }
+            children = children.concat(this.$slots.default)
+            return h(
+                'h' + this.leve,
+                { attrs: { title: this.title } },
+                children
+            )
+        }
+
+    })
+    //过滤器
+    Vue.filter('currency', (value, symble = '￥') => {
+        return symble + '-' + value
+    });
+    
+
 
     Vue.component('add-courte', {
-        props:['value'],
-        template:`<div>
-        <input type="text" @keydown.enter='addCourte' :value='value' @input='onInput'> 
+        props: ['value'],
+        template: `<div>
+        <input type="text" @keydown.enter='addCourte' :value="value" @input='onInput' v-focus> 
         <button @click='addCourte'>新增课程</button>
        </div>`,
-       methods: {
+        methods: {
             addCourte() {
-               this.$emit('add-courte')
+                this.$emit('add-courte')
             },
             onInput(e) {
                 this.$emit('input', e.target.value)
             }
-       },
+        },
     })
-   
+
+
 
     const app = new Vue({
         el: '#root',
@@ -80,24 +165,26 @@
             return {
                 courtes: [],
                 court: '',
-                show:false,
-                showWarning:false
+                show: false,
+                showWarning: false
             }
         },
         methods: {
             addCourte() {
-                if(this.court) {
+                if (this.court) {
                     this.courtes.push(this.court)
-                    this.court= '';
+                    this.court = '';
                     this.show = true
-                }else {
+                } else {
                     this.showWarning = true
                 }
-            
+
             },
-            colseMsg() {
-                this.$refs.msg.close()
+            colseMsgError() {
                 this.$refs.msg1.close()
+            },
+            colseMsgSuccess() {
+                this.$refs.msg.close()
             }
         },
 
@@ -107,4 +194,5 @@
 
 
 </script>
+
 </html>
