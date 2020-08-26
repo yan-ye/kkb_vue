@@ -1,11 +1,11 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" :src="`${publicPath}assets/logo.png`"/>
+    <img alt="Vue logo" :src="`${publicPath}assets/logo.png`" />
     <message :show.sync="show" class="success">
       <template v-slot:title></template>
       <template>添加课程成功！</template>
     </message>
-     <message :show.sync="showWarning" class="warning">
+    <message :show.sync="showWarning" class="warning">
       <template v-slot:title>
         <strong>警告</strong>
       </template>
@@ -27,14 +27,14 @@ import message from "@/components/message.vue";
 import { getCourtes } from "@/service/getData.js";
 
 export default {
-  name: "Home",
+  name: "admin",
   data() {
     return {
       courtes: [],
       courte: "",
       show: false,
-      showWarning:false,
-      publicPath: process.env.BASE_URL
+      showWarning: false,
+      publicPath: process.env.BASE_URL,
     };
   },
   components: {
@@ -53,9 +53,12 @@ export default {
         this.courtes.push({ name: this.courte });
         this.courte = "";
         this.show = true;
-      }else {
+      } else {
         this.showWarning = true;
       }
+    },
+    setData(c) {
+      this.courtes = c.data;
     },
   },
   async created() {
@@ -64,13 +67,34 @@ export default {
     this.courtes = c.data;
     this.editPrice();
   },
-  beforeRouteEnter (to, from, next) {
-    if(window.isLogin) {
-      next()
-    }else {
-      next('/login?redirect='+ to.fullPath)
-    }
-  }
+
+  // beforeRouteEnter(to, from, next) {
+  //   if (window.isLogin) {
+  //     next();
+  //   } else {
+  //     next("/login?redirect=" + to.fullPath);
+  //   }
+  // },
+
+  //路由进入前异步获取数据
+  // async beforeRouteEnter(to, from, next) {
+  //   if (window.isLogin) {
+  //     let c = await getCourtes();
+  //     next((vm) => {
+  //       vm.setData(c);
+  //     });
+  //   } else {
+  //     next("/login?redirect=" + to.fullPath);
+  //   }
+  // },
+
+
+  // 路由更新时异步获取数据
+  // async beforeRouteUpdate(to, from, next) {
+  //   let c = await getCourtes();
+  //   this.setData(c)
+  //   next()
+  // },
 };
 </script>
 

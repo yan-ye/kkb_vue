@@ -5,7 +5,10 @@
       <router-link to="/admin">admin</router-link> |
       <router-link to="/detail/测试">detail</router-link>
     </div>
-    <router-view/>
+    <keep-alive include="admin" max='10'>
+       <router-view/>
+    </keep-alive>
+   
   </div>
 </template>
 
