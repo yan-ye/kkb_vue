@@ -44,7 +44,7 @@ export default {
       // this.$router.push(`/detail/${name}`)
       //命名的路由
       this.$router.push({
-        name: "HomeDetail",
+        name: "adminDetail",
         params: { name: name },
       });
     },

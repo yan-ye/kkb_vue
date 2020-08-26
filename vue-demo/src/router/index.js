@@ -1,22 +1,44 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import home from '../views/home.vue'
 
 Vue.use(VueRouter)
 
-  //配置
-  const routes = [
+//配置
+const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
+    name: 'home',
+    component: home
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('../components/login.vue')
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: () => import(/* webpackChunkName: "admin" */ '../views/admin.vue'),
+     meta: {
+      auth: true
+    }, 
+    
     children: [
       {
-        path: '/detail/:name',
-        name:'HomeDetail',
+        path: '/admin/detail/:name',
+        name: 'adminDetail',
         component: () => import(/* webpackChunkName: "detail" */ '../views/detail.vue')
       }
-    ]
+    ],
+    //路由守卫作用于单个路由
+    // beforeEnter(to, from, next) {
+    //   if(window.isLogin) {
+    //     next()
+    //   }else {
+    //     next('/login?redirect='+ to.fullPath)
+    //   }
+    // }
   },
   {
     path: '/detail/:name',
@@ -30,9 +52,24 @@ Vue.use(VueRouter)
 ]
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: 'history', 
   base: process.env.BASE_URL,
   routes
 })
+
+//全局守卫
+// router.beforeEach((to, from, next) => {
+//   //判断是否需要守卫
+//   if(to.meta.auth) {
+//      // 一些操作
+//      if(window.isLogin) {
+//        next()
+//      }else {
+//        next('/login?redirect=' + to.fullPath)
+//      }
+//   }else {
+//     next()
+//   }
+// });
 
 export default router
