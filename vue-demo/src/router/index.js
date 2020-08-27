@@ -100,35 +100,8 @@ router.beforeEach((to, from, next) => {
     if (to.path === '/login') {
       next('/')
     } else {
-      if(to.path === '/admin') {
-        router.addRoutes([
-          {
-            path: "/admin",
-            name: "admin",
-            component: () =>
-              import(/* webpackChunkName: "admin" */ "../views/admin.vue"),
-            meta: {
-              auth: true,
-            },
-
-            children: [
-              {
-                path: "/admin/detail/:name",
-                name: "adminDetail",
-                component: () =>
-                  import(/* webpackChunkName: "detail" */ "../views/detail.vue"),
-              },
-            ],
-            //路由守卫作用于单个路由
-            // beforeEnter(to, from, next) {
-            //   if(window.isLogin) {
-            //     next()
-            //   }else {
-            //     next('/login?redirect='+ to.fullPath)
-            //   }
-            // }
-          },
-        ]);
+      if (to.path === '/admin') {
+        router.addRoutes( store.state.use.useRoutes);
       }
       next()
     }
