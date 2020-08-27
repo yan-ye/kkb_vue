@@ -1,14 +1,13 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">home</router-link> |
-      <router-link to="/admin">admin</router-link> |
+      <router-link to="/">home</router-link>|
+      <router-link to="/admin">admin</router-link>|
       <router-link to="/detail/测试">detail</router-link>
     </div>
-    <keep-alive include="admin" max='10'>
-       <router-view/>
+    <keep-alive include="admin" max="10">
+      <router-view />
     </keep-alive>
-   
   </div>
 </template>
 

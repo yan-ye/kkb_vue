@@ -1,6 +1,7 @@
 <template>
   <div class="home">
     <img alt="Vue logo" :src="`${publicPath}assets/logo.png`" />
+    <login></login>
     <message :show.sync="show" class="success">
       <template v-slot:title></template>
       <template>添加课程成功！</template>
@@ -24,6 +25,7 @@
 import courteList from "@/components/courteList.vue";
 import courteAdd from "@/components/courteAdd.vue";
 import message from "@/components/message.vue";
+import login from "@/components/login.vue";
 import { getCourtes } from "@/service/getData.js";
 
 export default {
@@ -41,6 +43,7 @@ export default {
     courteList,
     courteAdd,
     message,
+    login,
   },
   methods: {
     editPrice() {
