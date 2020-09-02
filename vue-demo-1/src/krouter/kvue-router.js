@@ -1,6 +1,6 @@
 
 let Vue;
-
+import link from './krouter-link'
 // 实现一个插件: 挂载$router
 class KVueRouter {
     constructor(options) {
@@ -42,23 +42,24 @@ KVueRouter.install = function (_vue) {
 
 
     //实现两个全局组件 router-link   router-view
-    Vue.component('router-link', {
-        props: {
-            to: {
-                type: String,
-                required: true
-            },
-        },
-        //<a herf="#/home">abc</a>
-        //<router-link to='/home'>abc</router-link>
-        render(h) {
-            return h(
-                'a',
-                { attrs: { href: '#' + this.to } },
-                this.$slots.default
-            )
-        }
-    })
+    Vue.component('router-link', link)
+    // Vue.component('router-link', {
+    //     props: {
+    //         to: {
+    //             type: String,
+    //             required: true
+    //         },
+    //     },
+    //     //<a herf="#/home">abc</a>
+    //     //<router-link to='/home'>abc</router-link>
+    //     render(h) {
+    //         return h(
+    //             'a',
+    //             { attrs: { href: '#' + this.to } },
+    //             this.$slots.default
+    //         )
+    //     }
+    // })
     Vue.component('router-view', {
         render(h) {
             const {routerMap, current} = this.$router
