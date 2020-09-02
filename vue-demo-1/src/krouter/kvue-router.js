@@ -6,15 +6,23 @@ class KVueRouter {
     constructor(options) {
         this.$options = options
         this.current = '/'
+
+        //需要创建响应式的current属性
+        //利用Vue提供的defineReactive做响应   这样的current变化时 依赖他的组将就会重新render
         Vue.util.defineReactive(this, 'current', '/')
+       
         //监控url hash值得变化
         window.addEventListener('hashchange', this.onHashChange.bind(this))
-
         window.addEventListener('load', this.onHashChange.bind(this))
+
+        //路由映射表
+        this.routerMap = {}
+        options.routes.forEach( router =>{
+            this.routerMap[router.path] = router
+        })
 
     }
     onHashChange () {
-        console.log(window.location.hash, '>>>>>>')
         this.current = window.location.hash.slice(1)
     }
 }
@@ -53,12 +61,8 @@ KVueRouter.install = function (_vue) {
     })
     Vue.component('router-view', {
         render(h) {
-            let component = null;
-            this.$router.$options.routes.forEach(router => {
-                if (router.path === this.$router.current) {
-                    component = router.component
-                }
-            })
+            const {routerMap, current} = this.$router
+            const component = routerMap[current].component || null;
             return h(component)
         }
     })
