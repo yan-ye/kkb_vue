@@ -5,19 +5,20 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    counter:0,
+    count: 0
   },
   mutations: {
-    add(state) {
-      state.counter++
+    add() {
+      this.state.count++;
     }
   },
   actions: {
-    add({commit}) {
+    add({commit}){
       setTimeout(() => {
         commit('add')
       }, 1000);
     }
+   
   },
   modules: {
   }
