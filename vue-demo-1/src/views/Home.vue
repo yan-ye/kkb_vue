@@ -2,6 +2,8 @@
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
     <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <button @click="$store.commit('add')">counter: {{$store.state.counter}} </button>
+     <button @click="$store.dispatch('add')">asyn counter: {{$store.state.counter}}</button>
   </div>
 </template>
 
