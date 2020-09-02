@@ -25,8 +25,8 @@ import Kinput from "@/components/form/Kinput.vue";
 import Kformitem from "@/components/form/Kformitem.vue";
 import Kform from "@/components/form/Kform.vue";
 // import proUps from "@/utils/popUps";
-import proUps from "@/utils/popUps1";
-import notice from "@/components/notice.vue";
+// import proUps from "@/utils/popUps1";
+// import notice from "@/components/notice.vue";
 // import popups_extend from "@/utils/popups_extend";
 export default {
   data() {
@@ -50,7 +50,7 @@ export default {
   methods: {
     validateFrom() {
       this.$refs.logform.validate((valid) => {
-        const notice1 = proUps(notice, {
+        const notice1 = this.$notice({
           title: "你妈喊你回家吃饭",
           message: valid ? "这就回来" : "不饿，不吃了",
         });

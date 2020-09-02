@@ -1,6 +1,7 @@
 import Vue from 'vue';
+import Notice from '@/components/notice.vue'
 
-export default function create(component, prop) {
+ function create(component, prop) {
     const vm = new Vue({
         render(h) {
             return h(component, { props:prop })  //return 返回虚拟DOM
@@ -18,3 +19,11 @@ export default function create(component, prop) {
 
     return comp
 }
+
+export default {
+    install (Vue) {
+        Vue.prototype.$notice = function (options) {
+            return create (Notice, options)
+        } 
+    }
+} 
