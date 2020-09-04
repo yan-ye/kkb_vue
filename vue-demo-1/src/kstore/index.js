@@ -8,8 +8,8 @@ export default new Vuex.Store({
     count: 0
   },
   mutations: {
-    add() {
-      this.state.count++;
+    add(state) {
+      state.count++;
     }
   },
   actions: {
