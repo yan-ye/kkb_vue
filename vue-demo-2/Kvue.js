@@ -35,6 +35,9 @@ class Kvue{
 
         //代理方便访问数据
         proxy(this, '$data')
+
+        //编译
+        new Compil(options.el, this)
     }
 }
 

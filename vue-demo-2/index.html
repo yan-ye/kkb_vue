@@ -8,9 +8,10 @@
 <body>
     <div id="app">
         <p>{{count}}</p>
-        <p>{{count}}</p>
+        <p k-text='count'></p>
     </div>
     <script src="./Kvue.js"></script>
+    <script src="./compile.js"></script>
     <script>
         const app = new Kvue({
             el: '#app',
@@ -20,8 +21,7 @@
         })
 
         setInterval(() => {
-            // console.log(11111);
-            app.count++;
+            // app.count++;
         }, 1000);
 
     </script>
