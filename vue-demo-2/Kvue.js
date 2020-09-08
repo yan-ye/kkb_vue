@@ -32,7 +32,24 @@ class Kvue{
 
         //响应式  --- 劫持数据做响应式
         observe(this.$data)
+
+        //代理方便访问数据
+        proxy(this, '$data')
     }
+}
+
+function proxy(vm, soureceeKey) {
+   Object.keys( vm[soureceeKey]).forEach(key =>{
+       //把$data的属性 代理到vm上方便访问
+       Object.defineProperty(vm, key, {
+           get() {
+               return vm[soureceeKey][key]
+           },
+           set(newval) {
+            vm[soureceeKey][key] = newval
+           }
+       })
+   })
 }
 
 
