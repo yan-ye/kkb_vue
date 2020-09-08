@@ -38,9 +38,7 @@ class Compil {
             let [attrName, attrValue] = [attr.name, attr.value]
             if(this.isDirective(attrName)){
                 let dir = attrName.substring(2);
-                if(this[dir]) {
-                    this[dir](node, attrValue)
-                }
+                this[dir] && this[dir](node, attrValue)
             }
         })
     }
