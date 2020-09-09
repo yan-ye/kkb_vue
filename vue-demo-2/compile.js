@@ -23,15 +23,26 @@ class Compil {
             }
         })
     }
+
     isElement(node) {
         return node.nodeType === 1
     }
+
+
     inTer(node){
         return node.nodeType === 3 && /\{\{(.*)\}\}/.test(node.textContent)
     }
+
+
     compilText(node) {
-        node.textContent = this.$vm[RegExp.$1]
+        this.update(node, RegExp.$1, 'text')
     }
+
+    text(node, value){
+        this.update(node, value, 'text')
+    }
+
+
     compilElement(node) {
         const nodeAttrs = node.attributes
         Array.from(nodeAttrs).forEach(attr =>{
@@ -42,11 +53,27 @@ class Compil {
             }
         })
     }
+
     isDirective(attr) {
         return attr.indexOf('k-') == 0
     }
-    text(node, value){
-        node.textContent = this.$vm[value]
+
+
+    update(node, exp, dir){
+          //初始化
+        //指令对应的更新函数 xxUpdater
+        const fn = this[dir + 'Updater']
+        fn && fn(node, this.$vm[exp])
+
+        //更新     更新一个函数  可以更新对应的DOM元素
+        new Watcher(this.$vm, exp, function(val) {
+            fn && fn(node, val)
+        })
+    }
+
+
+    textUpdater(node, value) {
+        node.textContent = value
     }
 
 }

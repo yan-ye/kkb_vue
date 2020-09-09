@@ -3,16 +3,25 @@
 
 //拦截数据 做响应式数据
 function defineReactive(obj, key, val) {
+    //递归
     observe(val)
+    //创建一个dep和当前的key一一对应
+    const dep = new Dep()
+
     Object.defineProperty(obj, key, {
         get() {
             console.log('get', key, val);
+            //依赖收集  
+            Dep.target && dep.addDep(Dep.target)
             return val
         },
         set (newval){
             observe(newval)
             val = newval
             console.log('set', key, newval);
+            console.log(watchers,'ddddddd');
+            // watchers.forEach(watcher => watcher.update())
+            dep.notify()
         }
     })
 }
@@ -70,6 +79,37 @@ class Observe {
         })
     }
 }
+const watchers = [];
+
+//保存更新函数 值发生变化调用更新函数
+//每个响应式的可以 都要对应一个 watcher  用一次天添加一个watcher
+class Watcher {
+    constructor(vm, key, updateFn){
+        this.vm = vm
+        this.key = key,
+        this.updateFn = updateFn
+        // watchers.push(this)
+        //dep.target 静态属性上设置为当前的watcher实例
+        Dep.target = this
+        this.vm[this.key] //读取来触发getter
+        Dep.target = null //收集完毕质控
+    }
+    update() {
+        this.updateFn.call(this.vm, this.vm[this.key])
+    }
+}
 
 
+//dep 依赖 管理某个key相关所有依赖
+class Dep {
+    constructor() {
+        this.deps = []
+    }
+    addDep(dep){
+        this.deps.push(dep)
+    }
+    notify() {
+        this.deps.forEach(dep => dep.update())
+    }
+}
 
