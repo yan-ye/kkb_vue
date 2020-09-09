@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <p>{{count}}</p>
+        <p>{{count}}</p>
+        <p k-text='count'></p>
+        <p k-html='desc'></p>
+    </div>
+</body>
+<script src="./Kvue.js"></script>
+<script src="./compiler.js"></script>
+<script>
+    const app = new Kvue({
+        el:'#app',
+        data:{
+            count:1,
+            desc: '<span style="color: red;">Kvue.js 可还行？</span>'
+        }
+    })
+    setInterval(() => {
+        app.count++;
+    }, 1000);
+
+</script>
+</html>
