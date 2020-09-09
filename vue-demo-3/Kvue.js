@@ -2,22 +2,25 @@
 
 
 //数据劫持 做响应化处理
+
 function defineReactive(obj, key, val) {
+   
     //递归一下值 ---> val
     observe(val)
+
+    //创建哟个dep
+    const dep = new Dep()
     Object.defineProperty(obj, key, {
         get() {
-            console.log('get', key, val);
+            Dep.target && dep.addDep(Dep.target)
             return val
         },
         set(newVal) {
+            console.log(dep,key, '>>>>>',newVal,1111);
             //递归一下新设置的值 ---> newVal
             observe(val)
             val = newVal
-            console.log('set', key, newVal);
-            watchers.forEach(watcher =>{
-                watcher.update()
-            })
+            dep.notify()
         }
     })
 }
@@ -85,20 +88,59 @@ class Observe {
 
 }
 
-const watchers = []; //临时保存watcher
-//监听器：负责更新视图
-//每个响应化的key对应一个watcher
+// const watchers = []; //临时保存watcher
+// //监听器：负责更新视图
+// //每个响应化的key对应一个watcher
+// class Watcher{
+//     constructor(vm, key, updateFn){
+//         //Kvue实例
+//         this.vm = vm,
+//         //key
+//         this.key = key,
+//         //更新函数
+//         this.updateFn = updateFn
+//         watchers.push(this)
+//     }
+//     update() {
+//         this.updateFn.call(this.vm, this.vm[this.key])
+//     }
+// }
+
+
+const watchers = [] //临时保存数据
+//监听器  观赏数据更新试图
 class Watcher{
     constructor(vm, key, updateFn){
-        //Kvue实例
-        this.vm = vm,
+        //vue 实例
+        this.vm = vm;
         //key
         this.key = key,
-        //更新函数
+        //保存更新函数
         this.updateFn = updateFn
-        watchers.push(this)
+        // watchers.push(this)
+        Dep.target = this
+        this.vm[this.key]
+        Dep.target = null
     }
-    update() {
+    //对外提供一个更新函数
+    update(){
+        //掉用传过来的更新函数 并且传值
         this.updateFn.call(this.vm, this.vm[this.key])
+    }
+
+}
+
+//dep 依赖收集
+class Dep {
+    constructor(){
+        this.deps = []
+    }
+    addDep(dep){
+        this.deps.push(dep)
+    }
+    notify(){
+        this.deps.forEach(dep =>{
+            dep.update()
+        })
     }
 }

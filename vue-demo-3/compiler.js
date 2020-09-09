@@ -87,7 +87,7 @@ class Compiler {
         //约定更新方法 xxxUpdater
         const fn = this[dir + 'Updater']
         fn && fn(node, this.$vm[exp]) //初始化视图
-        new Watcher(this.$vm, exp, function (val) { //更新视图
+        new Watcher(this.$vm, exp, function (val) { //保存一个新的watcher对应一个key
             fn && fn(node, val)
         })
     }
