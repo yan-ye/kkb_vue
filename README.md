@@ -36,6 +36,11 @@
     - 我们所定义的组件 其实是**组件配置**最终目的是转换为**虚拟DOM**
     - 组件配置 =>  VueComponent => render() => 虚拟DOM =>(更新时)DOM
     - 再研究一下
+    
+    
+    
+    
+    
 
 ### ssr服务端渲染测试
 - [vue-demo-5-ssr-test](https://github.com/yan-ye/kkb_vue/tree/master/vue-demo-5-ssr-test "vue-demo-5-ssr-test")
