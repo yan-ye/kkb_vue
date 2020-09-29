@@ -37,8 +37,8 @@
     - 组件配置 =>  VueComponent => render() => 虚拟DOM =>(更新时)DOM
     - 再研究一下
 
-
- #### 
-    ssr服务端渲染 测试 ---- vue-demo-5-ssr-test / 06-vue-demo-ssr-test
+### ssr服务端渲染测试
+- vue-demo-5-ssr-test
+- 06-vue-demo-ssr-test
 
        
