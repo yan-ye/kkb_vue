@@ -37,11 +37,6 @@
     - 组件配置 =>  VueComponent => render() => 虚拟DOM =>(更新时)DOM
     - 再研究一下
     
-    
-    
-    
-    
-
 ### ssr服务端渲染测试
 - [vue-demo-5-ssr-test](https://github.com/yan-ye/kkb_vue/tree/master/vue-demo-5-ssr-test "vue-demo-5-ssr-test")
 - [06-vue-demo-ssr-test](https://github.com/yan-ye/kkb_vue/tree/master/06-vue-demo-ssr-test "06-vue-demo-ssr-test")
