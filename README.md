@@ -39,5 +39,6 @@
 
 
  #### 
-    ssr服务端渲染 小小测试 ---- 
+    ssr服务端渲染 测试 ---- vue-demo-5-ssr-test / 06-vue-demo-ssr-test
+
        
