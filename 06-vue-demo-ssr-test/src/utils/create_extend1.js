@@ -16,4 +16,5 @@ function create (cmop, pros) {
     return comp
 }
 
+
 export default create
