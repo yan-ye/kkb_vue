@@ -20,7 +20,7 @@
 import children1 from "./children1.vue";
 import children2 from "./children2.vue";
 import notice11 from "@/components/notice.vue";
-import create from '../utils/create_extend';
+import create from '../utils/create_extend1.js';
 export default {
   name: "HelloWorld",
   props: {
