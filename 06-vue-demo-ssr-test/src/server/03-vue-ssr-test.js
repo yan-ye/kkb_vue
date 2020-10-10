@@ -4,7 +4,7 @@ const favicon = require('serve-favicon')
 const Vue = require('vue')
 const { createRenderer } = require('vue-server-renderer')
 const app = express()
-app.use(favicon(path.join(__dirname, '../../public/favicon.ico')))
+app.use(favicon(path.join(__dirname, '../../public','favicon.ico')))
 
 let vm = new Vue({
     data() {
