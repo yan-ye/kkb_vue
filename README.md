@@ -40,5 +40,6 @@
 ### ssr服务端渲染测试
 - [vue-demo-5-ssr-test](https://github.com/yan-ye/kkb_vue/tree/master/vue-demo-5-ssr-test "vue-demo-5-ssr-test")
 - [06-vue-demo-ssr-test](https://github.com/yan-ye/kkb_vue/tree/master/06-vue-demo-ssr-test "06-vue-demo-ssr-test")
+- [08-nuxt-demo](https://github.com/yan-ye/kkb_vue/tree/master/08-nuxt-demo, "08-nuxt-demo")
 
        
