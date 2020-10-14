@@ -8,6 +8,8 @@
 - debug for chrome      ==== *配合 http-server 服务器的方式访问html*====
 - vetur     ====*代码高亮*====
 - vue vscode snippets    ====*vue代码快捷键 如vbase*====
+- serve-favicon    ====*处理图标*====
+- body-parser    ====*请求体解析*====
 
 ### 生命周期
 - beforeCreate *组件实例未创建 常用于插件开发的初始化*
@@ -41,5 +43,7 @@
 - [vue-demo-5-ssr-test](https://github.com/yan-ye/kkb_vue/tree/master/vue-demo-5-ssr-test "vue-demo-5-ssr-test")
 - [06-vue-demo-ssr-test](https://github.com/yan-ye/kkb_vue/tree/master/06-vue-demo-ssr-test "06-vue-demo-ssr-test")
 - [08-nuxt-demo](https://github.com/yan-ye/kkb_vue/tree/master/08-nuxt-demo "08-nuxt-demo")
+
+
 
        
