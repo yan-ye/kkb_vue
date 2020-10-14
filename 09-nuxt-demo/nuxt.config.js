@@ -35,12 +35,14 @@ module.exports = {
         }
       )
     },
-    middleware:['auth']
+    // middleware:['auth']
   },
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
+    '@/plugins/test-plugin',
+    '@/plugins/interceptor',
   ],
   /*
   ** Nuxt.js dev-modules
@@ -52,6 +54,7 @@ module.exports = {
   */
   modules: [
     '@nuxtjs/axios',
+    'cookie-universal-nuxt'
   ],
   axios: {
     proxy: true

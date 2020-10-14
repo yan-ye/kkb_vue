@@ -10,11 +10,13 @@
         <li>{{ item.name + " : " + item.price }}</li>
       </nuxt-link>
     </ul>
+    <button @click="testPlugin111">测试插件</button>
   </div>
 </template>
 
 <script>
 export default {
+   middleware:['auth'],
   data() {
     return {
       fruit: [
@@ -25,6 +27,12 @@ export default {
         { name: "西瓜", price: "4元/kg" },
       ],
     };
+  },
+  methods: {
+    testPlugin111() {
+      this.$testPlugin('test plugin 😆😆😆......')
+      console.log(this)
+    }
   },
   head() {
     return {

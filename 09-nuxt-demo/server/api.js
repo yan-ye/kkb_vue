@@ -30,7 +30,8 @@ app.use('/api/:cmd', (req, res) => {
             case 'login':
                 console.log(req.body, '>>>>>>')
                 setTimeout(() => {
-                    res.json({ok:1})
+                    res.cookie('token', 'yanye')
+                    res.json({token:1})
                 }, 1000);
                 break;
             default:
