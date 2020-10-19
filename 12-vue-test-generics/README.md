@@ -1,4 +1,4 @@
-# 11-vue-ts
+# 12-vue-test-generics
 
 ## Project setup
 ```
@@ -22,9 +22,6 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
-
-
-
 ### 类型  原始类型  或 对象类型   不是原始类型的都是对象类型
 
 ### 类型断言  ！ as
