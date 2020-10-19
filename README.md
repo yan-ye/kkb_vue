@@ -39,6 +39,7 @@
     - 组件配置 =>  VueComponent => render() => 虚拟DOM =>(更新时)DOM
     - 再研究一下
 
+####  ============  TS =============
 
 #### 类型  
 - 原始类型  或 对象类型   不是原始类型的都是对象类型
@@ -63,9 +64,9 @@
 #### 泛型   
 - <T>   interface Resulet<T> {ok: 1 | 2, data T}   function getRsult<T>(data:T):Resulet<T>{ return {ok：1, data}}      getRsult<string>('hi')
 
-### 声明文件  .d.ts 命名的文件
+#### 声明文件  .d.ts 命名的文件
 
-### 装饰器  类装饰器 一个参数 targe 实例 、 方法装饰器 三个参数  target 实例  name 方法名  descriptor  
+#### 装饰器  类装饰器 一个参数 targe 实例 、 方法装饰器 三个参数  target 实例  name 方法名  descriptor  
 
     
 ### ssr服务端渲染测试
