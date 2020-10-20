@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import App from './App.vue'
-import router from './router'
+import {router} from './router'
 import '@/icons'
 import store from './store'
+
+import './permission'
 
 Vue.config.productionTip = false
 
