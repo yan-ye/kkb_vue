@@ -17,7 +17,7 @@ export const constantRouters = [
   }
 
 ]
-const asyncRouters = [
+export const asyncRouters = [
   {
     path:'/about',
     name:'About',
