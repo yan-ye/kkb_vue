@@ -21,6 +21,11 @@ const asyncRouters = [
   {
     path:'/about',
     name:'About',
+    meta: {
+      title: "About",
+      icon: "tianqi",
+      roles:['admin', 'editor']
+    },
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
 ]
