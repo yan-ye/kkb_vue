@@ -3,5 +3,9 @@ module.exports = {
     publicPath:'/',
     devServer:{
         port,
+    },
+    configureWebpack: {
+        name: 'Vue 实践'
     }
+
 }
