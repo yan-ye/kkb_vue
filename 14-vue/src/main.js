@@ -3,7 +3,14 @@ import App from './App.vue'
 import {router} from './router'
 import store from './store'
 import './permission'
+import { permission } from "./directives/promission";
 Vue.config.productionTip = false
+
+//注册自定义指令
+Vue.directive('role-button', permission)
+
+//事件总线
+Vue.prototype.$bus = new Vue()
 
 new Vue({
   router,
