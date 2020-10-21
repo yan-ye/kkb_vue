@@ -6,6 +6,9 @@ import './permission'
 import { permission } from "./directives/promission";
 Vue.config.productionTip = false
 
+//引入svg图标
+import '@/icons'
+
 //注册自定义指令
 Vue.directive('role-button', permission)
 
