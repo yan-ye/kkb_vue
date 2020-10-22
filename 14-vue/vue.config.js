@@ -7,6 +7,7 @@ module.exports = {
     publicPath:'/',
     devServer:{
         port,
+        proxy:'http://192.168.9.109:3000/'
     },
     configureWebpack: {
         name: 'Vue 实践'
