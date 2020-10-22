@@ -32,7 +32,7 @@
 ### 使用方式的变化
 -  new Vue({})  ==>  Vue.createApp({})
 - .$mount('#pp') ==> .mount('#pp')
-- 不需要 #el 选项了
+- 不需要 $el 选项了
 
 ### 杀手级的 composition Api
 - setup(){}
