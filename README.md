@@ -74,6 +74,7 @@
 - [06-vue-demo-ssr-test](https://github.com/yan-ye/kkb_vue/tree/master/06-vue-demo-ssr-test "06-vue-demo-ssr-test")
 - [08-nuxt-demo](https://github.com/yan-ye/kkb_vue/tree/master/08-nuxt-demo "08-nuxt-demo")
 - [ts环境搭建](https://github.com/yan-ye/kkb_vue/tree/master/10-ts-test-1)
+- [vue3初探](https://github.com/yan-ye/kkb_vue/tree/master/15-vue3 "vue3初探")
 
 
 
